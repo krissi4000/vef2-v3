@@ -5,9 +5,9 @@
 - [x] prisma seed
 - [x] tengja GET /authors við prisma client/db
 
-- [ ] paging
-- [ ] uppsetning á zod
-- [ ] uppsetning á zod innan Hono
+- [x] paging
+- [x] uppsetning á zod
+- [x] uppsetning á zod innan Hono
 
 - [ ] patch/put munur + útfærsla
 - [ ] uppsetning á öllum endapunktum fyrir /authors

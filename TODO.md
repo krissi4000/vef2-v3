@@ -16,4 +16,5 @@
   - [x] POST -     201/400/500
   - [x] PUT/:id    200/400/404/500
   - [x] DEL/:id  - 204/404/500
+
 - [ ] uppsetning á öllum endapunktum fyrir /news

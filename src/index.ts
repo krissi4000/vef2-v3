@@ -1,7 +1,8 @@
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
 import { prettyJSON } from 'hono/pretty-json'
-import { app as authorsApi} from './api/authors.api.js'
+import { app as authorsApi } from './api/authors.api.js'
+import { app as newsApi } from './api/news.api.js'
 
 const app = new Hono()
 
@@ -29,6 +30,8 @@ app.get('/', (c) => {
 })
 
 app.route('/authors', authorsApi);
+
+app.route('/news', newsApi);
 
 
 serve({

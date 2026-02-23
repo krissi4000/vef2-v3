@@ -15,6 +15,7 @@ datasource db {
 // Data model
 model News {
   id        Int     @id @default(autoincrement())
+  slug      String  @unique
   title     String
   excerpt   String
   content   String

@@ -9,12 +9,10 @@ const pagingSchema = z.object({
     offset: z.coerce.number().min(0).max(100).optional().default(0)
 }).strict();
 const authorSchema = z.object({
-    name: z.coerce.string().min(1).max(100),
+    // id tekinn inn sem parameter í routing, þannig getum ekki parse-að
+    name: z.string().min(1).max(100),
     email: z.email().max(100),
 }).strict();
-// const idAuthorSchema = authorSchema.extend({
-//   id: z.coerce.number().int().positive(),
-// }).strict()
 // Tekur við offset og limit querystring breytum sem stýra paging
 // ef valid, annars e-ð default
 app.get('/', zValidator('query', pagingSchema), async (c) => {
@@ -22,6 +20,9 @@ app.get('/', zValidator('query', pagingSchema), async (c) => {
     const offset = c.req.valid('query').offset;
     const authors = await prisma.author.findMany({ skip: offset, take: limit });
     const authorsCount = await prisma.author.count();
+    if (!authors) {
+        return c.json({ error: 'internal error' }, 500);
+    }
     const response = {
         data: authors,
         paging: {

@@ -66,6 +66,15 @@ async function main() {
             name: 'author seven'
         }
     });
+    await prisma.news.create({
+        data: {
+            title: 'title1',
+            excerpt: 'excerpt1',
+            content: 'content1',
+            published: false,
+            authorId: 7
+        }
+    });
 }
 main()
     .then(async () => {

@@ -6,11 +6,6 @@ import xss from 'xss'
 
 export const app = new Hono();
 
-type Author = {
-  id: string;
-  name: string
-}
-
 const pagingSchema = z.object({
   limit: z.coerce.number().min(1).max(100).optional().default(10),
   offset: z.coerce.number().min(0).max(100).optional().default(0)

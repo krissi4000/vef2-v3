@@ -29,7 +29,7 @@ const newsSchema = z.object({
   title: z.string().min(1).max(200),
   excerpt: z.string().min(1).max(500),
   content: z.string().min(1),
-  published: z.coerce.boolean().optional(),
+  published: z.coerce.boolean(),
   authorId: z.coerce.number().int().positive(),
 }).strict()
 
@@ -43,8 +43,8 @@ app.get('/',
     const limit = c.req.valid('query').limit
     const offset = c.req.valid('query').offset
 
-    const news = await prisma.author.findMany({ skip: offset, take: limit })
-    const newsCount = await prisma.author.count()
+    const news = await prisma.news.findMany({ skip: offset, take: limit })
+    const newsCount = await prisma.news.count()
 
     if (!news) { return c.json({ error: 'internal error' }, 500) }
 
@@ -118,52 +118,65 @@ app.put('/:id',
     const title = xss(c.req.valid('json').title)
     const excerpt = xss(c.req.valid('json').excerpt)
     const content = xss(c.req.valid('json').content)
-    const published = xss(c.req.valid('json').published)
+    const published = c.req.valid('json').published
 
-    const authorId = xss(c.req.valid('json').authorId)
+    const authorId = Number(c.req.valid('json').authorId)
 
 
-    const authorId = await prisma.author.findUnique(
+    const newsId = await prisma.news.findUnique(
       { where: { id: Number(id) }, })
 
-    if (!authorId) { return c.json({ error: 'author not found' }, 404) }
+    if (!newsId) { return c.json({ error: 'news not found' }, 404) }
 
-    const updatedAuthor = await prisma.author.update({
+    const updatedNews = await prisma.news.update({
       where: { id: id },
-      data: { name: name, email: email },
+      data: {
+        title: title,
+        excerpt: excerpt,
+        content: content,
+        published: published,
+        authorId: authorId
+      },
     });
+
+
+    if (!updatedNews) {
+      return c.json({ error: 'internal error' }, 500)
+    }
+
+    return c.json({ data: updatedNews }, 200)
+
+  })
 //
 //
-//     if (!updatedAuthor) {
-//       return c.json({ error: 'internal error' }, 500)
-//     }
-//
-//     return c.json({ data: updatedAuthor }, 200)
-//
-//   })
-//
-//
-// app.post('/',
-//   zValidator('json', authorSchema, (result, c) => {
-//     if (!result.success) {
-//       return c.json({ error: 'bad request (zod error)' }, 400)
-//     }
-//   }),
-//   async (c) => {
-//
-//     const email = xss(c.req.valid('json').email)
-//     const name = xss(c.req.valid('json').name)
-//
-//     const author = await prisma.author.create({
-//       data: {
-//         email: email,
-//         name: name,
-//       },
-//     });
-//
-//     if (!author) {
-//       return c.json({ error: 'internal error' }, 500)
-//     }
-//
-//     return c.json({ data: author }, 201)
-//   })
+app.post('/',
+  zValidator('json', newsSchema, (result, c) => {
+    if (!result.success) {
+      return c.json({ error: 'bad request (zod error)' }, 400)
+    }
+  }),
+  async (c) => {
+
+    const title = xss(c.req.valid('json').title)
+    const excerpt = xss(c.req.valid('json').excerpt)
+    const content = xss(c.req.valid('json').content)
+    const published = c.req.valid('json').published
+
+    const authorId = Number(c.req.valid('json').authorId)
+
+    const newNews = await prisma.news.create({
+      data: {
+        title: title,
+        excerpt: excerpt,
+        content: content,
+        published: published,
+        authorId: authorId
+      },
+    });
+
+    if (!newNews) {
+      return c.json({ error: 'internal error' }, 500)
+    }
+
+    return c.json({ data: newNews }, 201)
+  })

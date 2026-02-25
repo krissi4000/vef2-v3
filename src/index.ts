@@ -29,6 +29,28 @@ app.get('/', (c) => {
   })
 })
 
+app.get('/', (c) => {
+  return c.json({
+    '/authors': [
+
+      {
+        method: 'get',
+        description: 'get all authors, paginated'
+      },
+      {
+        method: 'post',
+        description: 'create a new author'
+      },
+      {
+        method: 'put',
+      },
+      {
+        method: 'delete',
+      },
+    ]
+  })
+})
+
 app.route('/authors', authorsApi);
 
 app.route('/news', newsApi);

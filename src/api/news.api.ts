@@ -36,7 +36,7 @@ const newsSchema = z.object({
 
 // Tekur við offset og limit querystring breytum sem stýra paging
 // ef valid, annars e-ð default
-app.get('/',
+export const newsGet = app.get('/',
   zValidator('query', pagingSchema),
 
   async (c) => {

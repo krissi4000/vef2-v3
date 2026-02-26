@@ -30,7 +30,7 @@ const newsSchema = z.object({
 }).strict();
 // Tekur við offset og limit querystring breytum sem stýra paging
 // ef valid, annars e-ð default
-app.get('/', zValidator('query', pagingSchema), async (c) => {
+export const newsGet = app.get('/', zValidator('query', pagingSchema), async (c) => {
     const limit = c.req.valid('query').limit;
     const offset = c.req.valid('query').offset;
     const news = await prisma.news.findMany({ skip: offset, take: limit });

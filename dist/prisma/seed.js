@@ -1,4 +1,5 @@
 import { prisma } from '../src/prisma.js';
+import slug from 'slug';
 async function main() {
     await prisma.author.create({
         data: {
@@ -72,6 +73,7 @@ async function main() {
             excerpt: 'excerpt1',
             content: 'content1',
             published: false,
+            slug: slug('title1'),
             authorId: 7
         }
     });

@@ -82,16 +82,19 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 });
 export const NewsScalarFieldEnum = {
     id: 'id',
+    slug: 'slug',
     title: 'title',
     excerpt: 'excerpt',
     content: 'content',
     published: 'published',
+    createdAt: 'createdAt',
     authorId: 'authorId'
 };
 export const AuthorScalarFieldEnum = {
     id: 'id',
     email: 'email',
-    name: 'name'
+    name: 'name',
+    createdAt: 'createdAt'
 };
 export const SortOrder = {
     asc: 'asc',

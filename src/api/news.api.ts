@@ -4,7 +4,7 @@ import * as z from 'zod'
 import { prisma } from '../prisma.js'
 import { zValidator } from "@hono/zod-validator";
 import xss from 'xss'
-
+import slug from 'slug'
 export const app = new Hono();
 
 // schema úr prisma
@@ -132,6 +132,7 @@ app.put('/:id',
       where: { id: id },
       data: {
         title: title,
+        slug: slug(title),
         excerpt: excerpt,
         content: content,
         published: published,
@@ -163,12 +164,14 @@ app.post('/',
     const published = c.req.valid('json').published
 
     const authorId = Number(c.req.valid('json').authorId)
+    // const slug = slugify(title, { lower: true, strict: true, trim: true });
 
     const newNews = await prisma.news.create({
       data: {
         title: title,
         excerpt: excerpt,
         content: content,
+        slug: slug(title),
         published: published,
         authorId: authorId
       },

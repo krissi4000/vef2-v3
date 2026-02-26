@@ -15,11 +15,12 @@ datasource db {
 // Data model
 model News {
   id        Int     @id @default(autoincrement())
-  slug      String  @unique
+  slug      String @unique
   title     String
   excerpt   String
   content   String
   published Boolean @default(false)
+  createdAt DateTime @default(now())
   author    Author  @relation(fields:  [authorId], references: [id])
   authorId  Int
 }
@@ -29,4 +30,5 @@ model Author {
   email String  @unique
   name  String
   posts News[]
+  createdAt DateTime @default(now())
 }
